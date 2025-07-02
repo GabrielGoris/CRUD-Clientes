@@ -17,7 +17,6 @@ export default class ClienteDAO implements IDAO<Cliente> {
             entidade.status,
             entidade.genero
         );
-        // Buscar o cliente recém-cadastrado
         const cliente = await db.get("SELECT * FROM clientes WHERE id = ?", lastID);
         return cliente;
     }
