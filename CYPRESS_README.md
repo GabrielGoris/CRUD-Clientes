@@ -1,40 +1,56 @@
-# Testes E2E com Cypress - Sistema de Carrinho e Pagamento
+# Testes E2E com Cypress - Sistema E-commerce Completo
 
-Este projeto inclui uma suíte completa de testes end-to-end (E2E) usando Cypress para validar todas as funcionalidades do sistema de carrinho de compras e pagamento.
+Este projeto inclui uma suíte completa de testes end-to-end (E2E) usando Cypress para validar todas as funcionalidades do sistema de e-commerce, incluindo carrinho de compras, pagamento, endereços e gestão de pedidos.
 
-## 📋 Escopo dos Testes
+## 📋 Escopo dos Testes Implementados
 
-Os testes cobrem os seguintes cenários:
+Os testes cobrem todos os cenários solicitados:
 
 ### 🛒 Operações do Carrinho
 
-- ✅ Adicionar produtos ao carrinho
-- ✅ Remover produtos do carrinho
-- ✅ Alterar quantidade de itens
-- ✅ Calcular total corretamente
+**Arquivo: `cart-operations.cy.ts`**
+
+- ✅ Adicionar produtos ao carrinho (individual e múltiplos)
+- ✅ Remover produtos do carrinho (individual e todos)
+- ✅ Alterar quantidade de itens (aumentar, diminuir, editar manualmente)
+- ✅ Calcular total corretamente com múltiplos itens
 - ✅ Persistir carrinho entre sessões
 - ✅ Validações de carrinho vazio
+- ✅ Validação de quantidade mínima (remove item quando chega a zero)
+- ✅ Confirmação de ações (remoção, limpeza)
 
 ### 💳 Formas de Pagamento
 
-- ✅ Aplicar cupons de troca (múltiplos)
-- ✅ Aplicar cupons promocionais (único)
+**Arquivo: `payment-methods.cy.ts`**
+
+- ✅ Aplicar cupons de troca (múltiplos permitidos)
+- ✅ Aplicar cupons promocionais (apenas um permitido)
 - ✅ Combinar cupons de troca e promocionais
-- ✅ Usar cartões de crédito cadastrados
+- ✅ Usar cartões de crédito já cadastrados
 - ✅ Cadastrar novos cartões durante o pagamento
 - ✅ Usar múltiplos cartões para pagamento
-- ✅ Validações de cartão (expirado, limite, etc.)
+- ✅ Validações de cartão (expirado, limite, dados inválidos)
+- ✅ Validação de valores (soma dos cartões = total)
+- ✅ Rejeição de cupons inválidos ou já utilizados
 
 ### 🏠 Endereços de Entrega
+
+**Arquivo: `address-selection.cy.ts`**
 
 - ✅ Selecionar endereço existente
 - ✅ Cadastrar novo endereço
 - ✅ Editar endereço existente
 - ✅ Excluir endereço
-- ✅ Buscar endereço por CEP
+- ✅ Buscar endereço por CEP (preenchimento automático)
 - ✅ Calcular frete baseado no endereço
+- ✅ Validação de campos obrigatórios
+- ✅ Validação de formato do CEP
+- ✅ Limite de endereços por cliente
+- ✅ Confirmação de ações (exclusão, cancelamento)
 
 ### 📦 Criação de Pedidos
+
+**Arquivo: `order-creation.cy.ts`**
 
 - ✅ Finalizar pedido com sucesso
 - ✅ Gerar ID único para cada pedido
@@ -43,8 +59,17 @@ Os testes cobrem os seguintes cenários:
 - ✅ Reduzir estoque dos produtos vendidos
 - ✅ Impedir venda de produtos sem estoque
 - ✅ Registrar histórico de movimentação de estoque
+- ✅ Validação de dados obrigatórios
+- ✅ Validação de carrinho não vazio
+- ✅ Cálculo correto com descontos
+- ✅ Integração com sistema de pagamento
+- ✅ Tratamento de erros de pagamento
+- ✅ Notificações para administrador
+- ✅ Atualização de status em tempo real
 
 ### 🔍 Consulta de Pedidos
+
+**Arquivo: `order-consultation.cy.ts`**
 
 - ✅ Buscar pedido por ID
 - ✅ Exibir informações completas do pedido
@@ -52,8 +77,64 @@ Os testes cobrem os seguintes cenários:
 - ✅ Filtrar por status e período
 - ✅ Ordenar por data e valor
 - ✅ Cancelar pedidos em aberto
+- ✅ Impedir cancelamento de pedidos processados
 - ✅ Imprimir comprovante
 - ✅ Reenviar email de confirmação
+- ✅ Exibir rastreamento do pedido
+- ✅ Estatísticas do cliente
+- ✅ Relatórios e gráficos
+
+## 📝 Cenários de Teste Específicos Implementados
+
+### Cenários do Carrinho
+
+1. **Adicionar produtos**: Testa adição individual e múltipla de produtos
+2. **Alterar quantidades**: Testa botões +/- e edição manual
+3. **Remover itens**: Testa remoção individual e limpeza completa
+4. **Persistência**: Verifica se carrinho mantém dados entre sessões
+5. **Validações**: Testa carrinho vazio e quantidades mínimas
+
+### Cenários de Pagamento
+
+1. **Cupons de troca**: Múltiplos cupons podem ser aplicados
+2. **Cupons promocionais**: Apenas um cupom promocional por vez
+3. **Combinação**: Cupons de troca + promocional simultaneamente
+4. **Cartões existentes**: Seleção de cartões já cadastrados
+5. **Novos cartões**: Cadastro durante o checkout
+6. **Múltiplos cartões**: Pagamento dividido entre cartões
+7. **Validações**: Cartões expirados, limite insuficiente, dados inválidos
+
+### Cenários de Endereço
+
+1. **Seleção**: Escolha entre endereços cadastrados
+2. **Cadastro**: Novo endereço durante checkout
+3. **Edição**: Modificação de endereços existentes
+4. **Exclusão**: Remoção de endereços
+5. **CEP**: Busca automática por CEP
+6. **Frete**: Cálculo baseado no endereço selecionado
+7. **Limites**: Máximo de endereços por cliente
+
+### Cenários de Pedido
+
+1. **Criação**: Finalização completa do pedido
+2. **ID único**: Geração de identificador único
+3. **Status**: Definição como "EM ABERTO"
+4. **Email**: Envio de confirmação
+5. **Estoque**: Redução automática do estoque
+6. **Validações**: Produtos sem estoque, dados obrigatórios
+7. **Integração**: Processamento de pagamento
+8. **Notificações**: Alertas para administradores
+
+### Cenários de Consulta
+
+1. **Busca por ID**: Localização de pedidos específicos
+2. **Listagem**: Todos os pedidos do cliente
+3. **Filtros**: Por status e período
+4. **Ordenação**: Por data e valor
+5. **Cancelamento**: Pedidos em aberto
+6. **Comprovantes**: Impressão de recibos
+7. **Rastreamento**: Acompanhamento de entrega
+8. **Estatísticas**: Relatórios do cliente
 
 ## 🚀 Como Executar os Testes
 
@@ -105,18 +186,83 @@ cypress/
 
 O projeto inclui comandos customizados para facilitar os testes:
 
+### Comandos de Dados de Teste
+
 - `cy.createTestClient(clientData)` - Criar cliente de teste
 - `cy.createTestProduct(productData)` - Criar produto de teste
 - `cy.cleanupTestData()` - Limpar dados de teste
+
+### Comandos do Carrinho
+
 - `cy.addToCart(productId, quantity)` - Adicionar produto ao carrinho
-- `cy.checkCartContains(productId, expectedQuantity)` - Verificar carrinho
-- `cy.applyCoupon(couponCode)` - Aplicar cupom
-- `cy.selectCreditCard(cardId)` - Selecionar cartão
-- `cy.fillNewCreditCard(cardData)` - Preencher novo cartão
-- `cy.selectDeliveryAddress(addressId)` - Selecionar endereço
-- `cy.fillNewAddress(addressData)` - Preencher novo endereço
+- `cy.checkCartContains(productId, expectedQuantity)` - Verificar se produto está no carrinho
+
+### Comandos de Pagamento
+
+- `cy.applyCoupon(couponCode)` - Aplicar cupom de desconto
+- `cy.selectCreditCard(cardId)` - Selecionar cartão cadastrado
+- `cy.fillNewCreditCard(cardData)` - Preencher dados de novo cartão
+
+### Comandos de Endereço
+
+- `cy.selectDeliveryAddress(addressId)` - Selecionar endereço existente
+- `cy.fillNewAddress(addressData)` - Preencher dados de novo endereço
+
+### Comandos de Pedido
+
 - `cy.completeOrder()` - Finalizar pedido
-- `cy.searchOrder(orderId)` - Buscar pedido
+- `cy.searchOrder(orderId)` - Buscar pedido por ID
+
+### Estrutura dos Dados
+
+**Dados do Cliente:**
+
+```typescript
+{
+  nome: string,
+  email: string,
+  cpf: string,
+  dataNascimento: string,
+  telefone: string
+}
+```
+
+**Dados do Produto:**
+
+```typescript
+{
+  nome: string,
+  preco: number,
+  estoque: number,
+  categoria: string,
+  descricao: string
+}
+```
+
+**Dados do Cartão:**
+
+```typescript
+{
+  number: string,
+  name: string,
+  expiry: string,
+  cvv: string,
+  brand: string
+}
+```
+
+**Dados do Endereço:**
+
+```typescript
+{
+  cep: string,
+  street: string,
+  number: string,
+  neighborhood: string,
+  city: string,
+  state: string
+}
+```
 
 ## ⚙️ Configuração
 
